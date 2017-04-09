@@ -11,8 +11,6 @@ public interface IDataSwapper<VM> {
      * Swap all datas
      */
     void swapData(List<? extends VM> list);
-
-
     /**
      * Append data to the end of current list
      */
