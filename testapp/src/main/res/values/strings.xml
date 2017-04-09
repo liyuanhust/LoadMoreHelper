@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">loadmoretest</string>
+    <string name="sample1">PtrFrameLayout RecyclerView</string>
+    <string name="sample2">SwipeRefreshLayout RecyclerView</string>
+    <string name="sample3">PtrFrameLayout ListView</string>
+    <string name="sample4">SwipeRefreshLayout ListView</string>
+</resources>
