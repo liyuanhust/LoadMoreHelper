@@ -1,7 +1,6 @@
 package com.lain.loadmorehelper.list.listview;
 
 import android.util.SparseArray;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -9,9 +8,8 @@ import android.widget.FrameLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.lain.loadmorehelper.ISimpleDataSwapper;
+import com.lain.loadmorehelper.IDataSwapper;
 import com.lain.loadmorehelper.LoadController;
-import com.lain.loadmorehelper.R;
 import com.lain.loadmorehelper.list.IFooterViewCreator;
 import com.lain.loadmorehelper.list.IListWrapper;
 
@@ -39,7 +37,7 @@ public class ListViewWrapper implements IListWrapper{
     @Override
     public void init(LoadController<?> loadController) {
         this.loadController = loadController;
-        ISimpleDataSwapper<?> dataSwapper = loadController.getSimpleDataSwaper();
+        IDataSwapper<?> dataSwapper = loadController.getSimpleDataSwaper();
         if (listView.getAdapter() == null && (dataSwapper instanceof ListAdapter)) {
             listView.setAdapter((ListAdapter) dataSwapper);
         }

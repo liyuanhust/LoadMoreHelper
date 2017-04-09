@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lain.loadmorehelper.ILoadViewCreator;
-import com.lain.loadmorehelper.ISimpleDataSwapper;
+import com.lain.loadmorehelper.IDataSwapper;
 import com.lain.loadmorehelper.LoadMoreHelper;
 import com.lain.loadmorehelper.PageData;
 import com.lain.loadmoretest.data.BaseResult;
@@ -52,7 +52,7 @@ public class Fragment3 extends Fragment{
         final MyAdapter3 adapter = new MyAdapter3();
         listView.setAdapter(adapter);
         final LoadMoreHelper<Item> loadHelper = LoadMoreHelper.create(ptrFrameLayout)
-                .setDataSwapper(new ISimpleDataSwapper<Item>() {
+                .setDataSwapper(new IDataSwapper<Item>() {
                     @Override
                     public void swapData(List<? extends Item> list) {
                         datas.clear();

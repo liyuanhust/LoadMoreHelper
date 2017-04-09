@@ -112,14 +112,14 @@ public abstract class LoadMoreHelper<VM> {
          * Set adapter
          * @param <VM>
          */
-        public <VM> BuilderStep2<VM> setDataSwapper(ISimpleDataSwapper<VM> dataSwapper) {
+        public <VM> BuilderStep2<VM> setDataSwapper(IDataSwapper<VM> dataSwapper) {
             return new BuilderStep2<>(this, dataSwapper);
         }
     }
 
     public static class BuilderStep2<VM> {
         private final ParamBuilder<VM> paramBuilder;
-        private BuilderStep2(BuilderStep1 step1, ISimpleDataSwapper<VM> dataSwapper) {
+        private BuilderStep2(BuilderStep1 step1, IDataSwapper<VM> dataSwapper) {
             paramBuilder = new ParamBuilder<>();
             paramBuilder.pullView = step1.pullView;
             paramBuilder.listWrapper = step1.listWrapper;
@@ -147,7 +147,7 @@ public abstract class LoadMoreHelper<VM> {
     public static class ParamBuilder<VM> {
         IListWrapper listWrapper;
         IPullView pullView;
-        ISimpleDataSwapper<VM> simpleDataSwaper;
+        IDataSwapper<VM> simpleDataSwaper;
         OnLoadEndHandler<VM> onLoadEndHandler;
         SyncDataLoader<VM> syncDataLoader;
         AsyncDataLoader<VM> asyncLoader;
@@ -171,7 +171,7 @@ public abstract class LoadMoreHelper<VM> {
         }
 
         /**
-         * Give a chance to handle data before call {@link ISimpleDataSwapper}
+         * Give a chance to handle data before call {@link IDataSwapper}
          * if not set, do nothing
          * @param onLoadEndHandler
          * @return

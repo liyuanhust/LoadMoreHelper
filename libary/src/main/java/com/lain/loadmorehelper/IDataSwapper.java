@@ -6,7 +6,7 @@ import java.util.List;
  * Created by liyuan on 16/12/19.
  */
 
-public interface ISimpleDataSwapper<VM> {
+public interface IDataSwapper<VM> {
     /**
      * Swap all datas
      */

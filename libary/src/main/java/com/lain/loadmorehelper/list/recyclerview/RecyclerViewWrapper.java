@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
-import com.lain.loadmorehelper.ISimpleDataSwapper;
+import com.lain.loadmorehelper.IDataSwapper;
 import com.lain.loadmorehelper.LoadController;
 import com.lain.loadmorehelper.list.IListWrapper;
 
@@ -26,7 +26,7 @@ public class RecyclerViewWrapper implements IListWrapper{
     public void init(LoadController<?> loadController) {
         this.loadController = loadController;
 
-        ISimpleDataSwapper<?> dataSwapper = loadController.getSimpleDataSwaper();
+        IDataSwapper<?> dataSwapper = loadController.getSimpleDataSwaper();
         initFooterAdapter((dataSwapper instanceof RecyclerView.Adapter)? (RecyclerView.Adapter)dataSwapper:null);
 
         //Always has load more view

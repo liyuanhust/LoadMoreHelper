@@ -213,7 +213,7 @@ public class LoadController<VM> {
         isDestoryed = true;
     }
 
-    public ISimpleDataSwapper<VM> getSimpleDataSwaper() {
+    public IDataSwapper<VM> getSimpleDataSwaper() {
         return paramBuilder.simpleDataSwaper;
     }
 

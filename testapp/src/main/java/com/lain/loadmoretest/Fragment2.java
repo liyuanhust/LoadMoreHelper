@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lain.loadmorehelper.ISimpleDataSwapper;
+import com.lain.loadmorehelper.IDataSwapper;
 import com.lain.loadmorehelper.LoadMoreHelper;
 import com.lain.loadmorehelper.PageData;
 import com.lain.loadmoretest.data.DataLoader;
@@ -72,7 +72,7 @@ public class Fragment2 extends Fragment {
     }
 
 
-    private class MyAdapter2 extends RecyclerView.Adapter<ViewHolder2> implements ISimpleDataSwapper<Item> {
+    private class MyAdapter2 extends RecyclerView.Adapter<ViewHolder2> implements IDataSwapper<Item> {
         @Override
         public ViewHolder2 onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.list_item, parent, false);

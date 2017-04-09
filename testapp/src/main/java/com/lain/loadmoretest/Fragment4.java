@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lain.loadmorehelper.ISimpleDataSwapper;
+import com.lain.loadmorehelper.IDataSwapper;
 import com.lain.loadmorehelper.LoadMoreHelper;
 import com.lain.loadmorehelper.PageData;
 import com.lain.loadmoretest.data.DataLoader;
@@ -71,7 +71,7 @@ public class Fragment4 extends Fragment {
     }
 
 
-    private class MyAdapter4 extends BaseAdapter implements ISimpleDataSwapper<Item> {
+    private class MyAdapter4 extends BaseAdapter implements IDataSwapper<Item> {
         @Override
         public int getCount() {
             return datas.size();
