@@ -69,7 +69,7 @@ private class MyAdapter2 extends RecyclerView.Adapter<ViewHolder2> implements ID
     		private boolean pageMore;
    			private int pageIndex;
 
-`AsyncLoader` implements without lambda
+`AsyncLoader` implements without lambda  
 `AsyncLoader` 使用非lambda表达式实现
 
 
