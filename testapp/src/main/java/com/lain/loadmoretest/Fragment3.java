@@ -3,12 +3,9 @@ package com.lain.loadmoretest;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,7 +13,7 @@ import android.widget.Toast;
 
 import com.lain.loadmorehelper.ILoadViewCreator;
 import com.lain.loadmorehelper.ISimpleDataSwapper;
-import com.lain.loadmorehelper.LoadHelper;
+import com.lain.loadmorehelper.LoadMoreHelper;
 import com.lain.loadmorehelper.PageData;
 import com.lain.loadmoretest.data.BaseResult;
 import com.lain.loadmoretest.data.DataLoader;
@@ -54,7 +51,7 @@ public class Fragment3 extends Fragment{
         ListView listView = (ListView) view.findViewById(R.id.list);
         final MyAdapter3 adapter = new MyAdapter3();
         listView.setAdapter(adapter);
-        final LoadHelper<Item> loadHelper = LoadHelper.create(ptrFrameLayout)
+        final LoadMoreHelper<Item> loadHelper = LoadMoreHelper.create(ptrFrameLayout)
                 .setDataSwapper(new ISimpleDataSwapper<Item>() {
                     @Override
                     public void swapData(List<? extends Item> list) {
@@ -69,7 +66,7 @@ public class Fragment3 extends Fragment{
                         adapter.notifyDataSetChanged();
                     }
                 })
-                .setSyncLoader(new LoadHelper.SyncDataLoader<Item>() {
+                .setSyncLoader(new LoadMoreHelper.SyncDataLoader<Item>() {
                     @Override
                     public PageData<Item> startLoadData(int page, PageData<Item> lastPageData) {
                         BaseResult<Item> result = DataLoader.loadDataSync(page, null);
@@ -81,7 +78,7 @@ public class Fragment3 extends Fragment{
                 })
                 .setLoadcompleteViewCreator(new ILoadViewCreator<Item>() {
                     @Override
-                    public View createView(ViewGroup parent, LoadHelper<Item> loadHelper) {
+                    public View createView(ViewGroup parent, LoadMoreHelper<Item> loadHelper) {
                         return LayoutInflater.from(parent.getContext()).inflate(R.layout.load_complete_layout, parent, false);
                     }
                 })

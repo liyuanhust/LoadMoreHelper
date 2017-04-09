@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lain.loadmorehelper.ISimpleDataSwapper;
-import com.lain.loadmorehelper.LoadHelper;
+import com.lain.loadmorehelper.LoadMoreHelper;
 import com.lain.loadmorehelper.PageData;
-import com.lain.loadmoretest.data.BaseResult;
 import com.lain.loadmoretest.data.DataLoader;
 import com.lain.loadmoretest.data.Item;
 
@@ -25,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -36,7 +33,7 @@ import rx.schedulers.Schedulers;
 
 public class Fragment4 extends Fragment {
     private List<Item> datas = new ArrayList<>();
-    private LoadHelper<Item> loadHelper;
+    private LoadMoreHelper<Item> loadHelper;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,7 +51,7 @@ public class Fragment4 extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
         final MyAdapter4 adapter = new MyAdapter4();
-        loadHelper = LoadHelper.create(swipeRefreshLayout)
+        loadHelper = LoadMoreHelper.create(swipeRefreshLayout)
                 .setDataSwapper(adapter)
                 .setAsyncLoader((page, lastPageData) -> doLoadData(page))
                 .startPullData(true);

@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.lain.loadmorehelper.ILoadViewCreator;
 import com.lain.loadmorehelper.ISimpleDataSwapper;
-import com.lain.loadmorehelper.LoadHelper;
+import com.lain.loadmorehelper.LoadMoreHelper;
 import com.lain.loadmorehelper.PageData;
 import com.lain.loadmoretest.data.BaseResult;
 import com.lain.loadmoretest.data.DataLoader;
@@ -53,7 +53,7 @@ public class Fragment1 extends Fragment{
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         final MyAdapter1 adapter = new MyAdapter1();
         recyclerView.setAdapter(adapter);
-        final LoadHelper<Item> loadHelper = LoadHelper.create(ptrFrameLayout)
+        final LoadMoreHelper<Item> loadHelper = LoadMoreHelper.create(ptrFrameLayout)
                 .setDataSwapper(new ISimpleDataSwapper<Item>() {
                     @Override
                     public void swapData(List<? extends Item> list) {
@@ -68,7 +68,7 @@ public class Fragment1 extends Fragment{
                         adapter.notifyDataSetChanged();
                     }
                 })
-                .setSyncLoader(new LoadHelper.SyncDataLoader<Item>() {
+                .setSyncLoader(new LoadMoreHelper.SyncDataLoader<Item>() {
                     @Override
                     public PageData<Item> startLoadData(int page, PageData<Item> lastPageData) {
                         BaseResult<Item> result = DataLoader.loadDataSync(page, null);
@@ -80,7 +80,7 @@ public class Fragment1 extends Fragment{
                 })
                 .setLoadcompleteViewCreator(new ILoadViewCreator<Item>() {
                     @Override
-                    public View createView(ViewGroup parent, LoadHelper<Item> loadHelper) {
+                    public View createView(ViewGroup parent, LoadMoreHelper<Item> loadHelper) {
                         return LayoutInflater.from(parent.getContext()).inflate(R.layout.load_complete_layout, parent, false);
                     }
                 })

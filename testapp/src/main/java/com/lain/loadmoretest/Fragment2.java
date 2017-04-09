@@ -13,9 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lain.loadmorehelper.ISimpleDataSwapper;
-import com.lain.loadmorehelper.LoadHelper;
+import com.lain.loadmorehelper.LoadMoreHelper;
 import com.lain.loadmorehelper.PageData;
-import com.lain.loadmoretest.data.BaseResult;
 import com.lain.loadmoretest.data.DataLoader;
 import com.lain.loadmoretest.data.Item;
 
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
@@ -32,9 +30,9 @@ import rx.schedulers.Schedulers;
  * and {@link RecyclerView}
  */
 
-public class Fragment2 extends Fragment{
+public class Fragment2 extends Fragment {
     private List<Item> datas = new ArrayList<>();
-    private LoadHelper<Item> loadHelper;
+    private LoadMoreHelper<Item> loadHelper;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,13 +48,13 @@ public class Fragment2 extends Fragment{
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout)view.findViewById(R.id.refresh);
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.list);
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.refresh);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         final MyAdapter2 adapter = new MyAdapter2();
-        loadHelper = LoadHelper.create(swipeRefreshLayout)
+        loadHelper = LoadMoreHelper.create(swipeRefreshLayout)
                 .setDataSwapper(adapter)
-                .setAsyncLoader((page, lastPageData)->doLoadData(page))
+                .setAsyncLoader((page, lastPageData) -> doLoadData(page))
                 .startPullData(true);
     }
 
@@ -64,24 +62,17 @@ public class Fragment2 extends Fragment{
         DataLoader.loadData(pageIndex, null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<BaseResult<Item>>() {
-                    @Override
-                    public void call(BaseResult<Item> result) {
-                        PageData<Item> pageData = PageData.createSuccess(pageIndex, result.getData(), result.isPageMore());
-                        loadHelper.onLoadEnd(pageData);
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        PageData<Item> pageData = PageData.createFailed(pageIndex);
-                        loadHelper.onLoadEnd(pageData);
-                    }
+                .subscribe(result -> {
+                    PageData<Item> pageData = PageData.createSuccess(pageIndex, result.getData(), result.isPageMore());
+                    loadHelper.onLoadEnd(pageData);
+                }, e -> {
+                    PageData<Item> pageData = PageData.createFailed(pageIndex);
+                    loadHelper.onLoadEnd(pageData);
                 });
     }
 
 
-
-    private class MyAdapter2 extends RecyclerView.Adapter<ViewHolder2> implements ISimpleDataSwapper<Item>{
+    private class MyAdapter2 extends RecyclerView.Adapter<ViewHolder2> implements ISimpleDataSwapper<Item> {
         @Override
         public ViewHolder2 onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.list_item, parent, false);
@@ -92,7 +83,7 @@ public class Fragment2 extends Fragment{
         public void onBindViewHolder(ViewHolder2 holder, int position) {
             final Item item = datas.get(position);
             holder.tv.setText(item.getContent());
-            holder.itemView.setOnClickListener(new View.OnClickListener(){
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getActivity(), "This is " + item.getContent(), Toast.LENGTH_SHORT).show();
@@ -125,9 +116,10 @@ public class Fragment2 extends Fragment{
 
     private static class ViewHolder2 extends RecyclerView.ViewHolder {
         public TextView tv;
+
         public ViewHolder2(View itemView) {
             super(itemView);
-            tv = (TextView)itemView.findViewById(R.id.txt);
+            tv = (TextView) itemView.findViewById(R.id.txt);
         }
     }
 }

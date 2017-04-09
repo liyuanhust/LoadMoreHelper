@@ -9,5 +9,5 @@ import android.view.ViewGroup;
 
 public interface ILoadViewCreator<VM> {
 
-    View createView(ViewGroup parent, LoadHelper<VM> loadHelper);
+    View createView(ViewGroup parent, LoadMoreHelper<VM> loadHelper);
 }

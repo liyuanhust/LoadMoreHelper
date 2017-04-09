@@ -24,7 +24,7 @@ public class LoadController<VM> {
     private static Handler sUiHandler = new Handler(Looper.getMainLooper());
     private static Executor sDefaultExecutor;
 
-    private LoadHelper.ParamBuilder<VM> paramBuilder;
+    private LoadMoreHelper.ParamBuilder<VM> paramBuilder;
 
     /**
      * Indicate current page index
@@ -53,11 +53,11 @@ public class LoadController<VM> {
     private PageData<VM> lastPageData;
 
 
-    LoadController(LoadHelper.ParamBuilder<VM> builder) {
+    LoadController(LoadMoreHelper.ParamBuilder<VM> builder) {
         init(builder);
     }
 
-    private void init(LoadHelper.ParamBuilder<VM> builder) {
+    private void init(LoadMoreHelper.ParamBuilder<VM> builder) {
         this.paramBuilder = builder;
 
         //Set pull data listener
@@ -218,9 +218,9 @@ public class LoadController<VM> {
     }
 
     public IFooterViewCreator getLoadMoreFooterCreator() {
-        if (paramBuilder.loadmoreCreator == null && LoadHelper.sLoadMoreLayoutRes != 0) {
+        if (paramBuilder.loadmoreCreator == null && LoadMoreHelper.sLoadMoreLayoutRes != 0) {
             paramBuilder.loadmoreCreator = ((parent, loadHelper) ->
-                LayoutInflater.from(parent.getContext()).inflate(LoadHelper.sLoadMoreLayoutRes, parent, false));
+                LayoutInflater.from(parent.getContext()).inflate(LoadMoreHelper.sLoadMoreLayoutRes, parent, false));
         }
         if (paramBuilder.loadmoreCreator != null) {
             return parent-> paramBuilder.loadmoreCreator.createView(parent, this.loadHelper);
@@ -229,9 +229,9 @@ public class LoadController<VM> {
     }
 
     public IFooterViewCreator getLoadFailedFooterCreator() {
-        if (paramBuilder.loadFailedViewCreator == null && LoadHelper.sLoadMoreLayoutRes != 0) {
+        if (paramBuilder.loadFailedViewCreator == null && LoadMoreHelper.sLoadMoreLayoutRes != 0) {
             paramBuilder.loadFailedViewCreator = ((parent, loadHelper) -> {
-                View view = LayoutInflater.from(parent.getContext()).inflate(LoadHelper.sLoadFaileLayoutRes, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(LoadMoreHelper.sLoadFaileLayoutRes, parent, false);
                 view.setOnClickListener(v->loadHelper.doLoadMore());
                 return view;
             });
@@ -243,9 +243,9 @@ public class LoadController<VM> {
     }
 
     public IFooterViewCreator getLoadCompleteViewCreator() {
-        if (paramBuilder.loadcompleteViewCreator == null && LoadHelper.sLoadCompleteLayoutRes != 0) {
+        if (paramBuilder.loadcompleteViewCreator == null && LoadMoreHelper.sLoadCompleteLayoutRes != 0) {
             paramBuilder.loadcompleteViewCreator = ((parent, loadHelper) ->
-                LayoutInflater.from(parent.getContext()).inflate(LoadHelper.sLoadCompleteLayoutRes, parent, false));
+                LayoutInflater.from(parent.getContext()).inflate(LoadMoreHelper.sLoadCompleteLayoutRes, parent, false));
         }
         if (paramBuilder.loadcompleteViewCreator != null) {
             return parent -> paramBuilder.loadcompleteViewCreator.createView(parent, this.loadHelper);
@@ -253,18 +253,18 @@ public class LoadController<VM> {
         return null;
     }
 
-    public LoadHelper<VM> getLoadHelper() {
+    public LoadMoreHelper<VM> getLoadHelper() {
         return loadHelper;
     }
 
-    private LoadHelper<VM> loadHelper = new LoadHelper<VM>() {
+    private LoadMoreHelper<VM> loadHelper = new LoadMoreHelper<VM>() {
         @MainThread
-        public LoadHelper<VM> startPullData(boolean anima) {
+        public LoadMoreHelper<VM> startPullData(boolean anima) {
             startLoadAuto(anima);
             return this;
         }
 
-        public LoadHelper<VM> onLoadEnd(PageData<VM> pageData) {
+        public LoadMoreHelper<VM> onLoadEnd(PageData<VM> pageData) {
             if (isOnMainThread()) {
                 onLoadDataEnd(pageData);
             } else {
@@ -274,7 +274,7 @@ public class LoadController<VM> {
         }
 
         @Override
-        public LoadHelper<VM> doLoadMore() {
+        public LoadMoreHelper<VM> doLoadMore() {
             if (isOnMainThread()) {
                 LoadController.this.doLoadMore();
             } else {

@@ -25,32 +25,32 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Created by liyuan on 16/12/19.
  */
 
-public abstract class LoadHelper<VM> {
+public abstract class LoadMoreHelper<VM> {
 
     /**
      * Call to load the data from page 1 without pull view animation
      * @return
      */
-    public  LoadHelper<VM> startPullData() {
+    public LoadMoreHelper<VM> startPullData() {
         return startPullData(false);
     }
 
 
     @MainThread
-    public abstract LoadHelper<VM> startPullData(boolean anima);
+    public abstract LoadMoreHelper<VM> startPullData(boolean anima);
 
     /**
      * When load data end on work thread, call this method to pass the data
      * @param pageData
      * @return
      */
-    public abstract LoadHelper<VM> onLoadEnd(PageData<VM> pageData);
+    public abstract LoadMoreHelper<VM> onLoadEnd(PageData<VM> pageData);
 
     /**
      * Load data manually, for example when load failed, call this method to retry
      * @return
      */
-    public abstract LoadHelper<VM> doLoadMore();
+    public abstract LoadMoreHelper<VM> doLoadMore();
 
     public static BuilderStep1 create(PtrFrameLayout ptrFrameLayout) {
         IPullView pullView = PtrFramePullView.create(ptrFrameLayout);
@@ -134,7 +134,7 @@ public abstract class LoadHelper<VM> {
         }
 
         /**
-         * Set async data loader, you must call {@link LoadHelper#onLoadEnd(PageData)} by yourself
+         * Set async data loader, you must call {@link LoadMoreHelper#onLoadEnd(PageData)} by yourself
          * when load data end.
          */
         public ParamBuilder<VM> setAsyncLoader(AsyncDataLoader<VM> asyncLoader) {
@@ -194,7 +194,7 @@ public abstract class LoadHelper<VM> {
 
         /**
          * Show the load failed view on bottom of listview.
-         * You could set it by self and do {@link LoadHelper#doLoadMore()} to retry when load failed.
+         * You could set it by self and do {@link LoadMoreHelper#doLoadMore()} to retry when load failed.
          * Default is null
          * @param footerCreator
          * @return
@@ -216,28 +216,28 @@ public abstract class LoadHelper<VM> {
         }
 
         /**
-         * Construct {@link LoadHelper}, call {@link LoadHelper#startPullData()} by yourself
+         * Construct {@link LoadMoreHelper}, call {@link LoadMoreHelper#startPullData()} by yourself
          * @return
          */
-        public LoadHelper<VM> build() {
+        public LoadMoreHelper<VM> build() {
             LoadController<VM> loadController = new LoadController<>(this);
             return loadController.getLoadHelper();
         }
 
         /**
-         * Construct {@link LoadHelper}, and start to pull data
+         * Construct {@link LoadMoreHelper}, and start to pull data
          * @return
          */
-        public LoadHelper<VM> startPullData() {
+        public LoadMoreHelper<VM> startPullData() {
             LoadController<VM> loadController = new LoadController<>(this);
-            LoadHelper<VM> loadHelper =  loadController.getLoadHelper();
+            LoadMoreHelper<VM> loadHelper =  loadController.getLoadHelper();
             loadHelper.startPullData();
             return loadHelper;
         }
 
-        public LoadHelper<VM> startPullData(boolean anima) {
+        public LoadMoreHelper<VM> startPullData(boolean anima) {
             LoadController<VM> loadController = new LoadController<>(this);
-            LoadHelper<VM> loadHelper =  loadController.getLoadHelper();
+            LoadMoreHelper<VM> loadHelper =  loadController.getLoadHelper();
             loadHelper.startPullData(anima);
             return loadHelper;
         }
