@@ -7,7 +7,7 @@ import android.view.ViewGroup;
  * Created by liyuan on 16/12/20.
  */
 
-public interface ILoadViewCreator<VM> {
+public interface ILoadViewCreator<DT> {
 
-    View createView(ViewGroup parent, LoadMoreHelper<VM> loadHelper);
+    View createView(ViewGroup parent, LoadMoreHelper<DT> loadHelper);
 }

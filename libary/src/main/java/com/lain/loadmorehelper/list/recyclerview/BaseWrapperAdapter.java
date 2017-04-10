@@ -21,10 +21,7 @@ import android.view.ViewGroup;
 
 import java.lang.ref.WeakReference;
 
-/**
- * Just copied from com.h6ah4i.android.widget.advrecyclerview.utils.BaseWrapperAdapter
- * @param <VH>
- */
+
 public class BaseWrapperAdapter<VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> {
     private static final String TAG = "ARVBaseWrapperAdapter";

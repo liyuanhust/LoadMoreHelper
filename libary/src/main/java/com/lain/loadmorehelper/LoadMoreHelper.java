@@ -25,32 +25,32 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
  * Created by liyuan on 16/12/19.
  */
 
-public abstract class LoadMoreHelper<VM> {
+public abstract class LoadMoreHelper<DT> {
 
     /**
      * Call to load the data from page 1 without pull view animation
      * @return
      */
-    public LoadMoreHelper<VM> startPullData() {
+    public LoadMoreHelper<DT> startPullData() {
         return startPullData(false);
     }
 
 
     @MainThread
-    public abstract LoadMoreHelper<VM> startPullData(boolean anima);
+    public abstract LoadMoreHelper<DT> startPullData(boolean anima);
 
     /**
      * When load data end on work thread, call this method to pass the data
      * @param pageData
      * @return
      */
-    public abstract LoadMoreHelper<VM> onLoadEnd(PageData<VM> pageData);
+    public abstract LoadMoreHelper<DT> onLoadEnd(PageData<DT> pageData);
 
     /**
      * Load data manually, for example when load failed, call this method to retry
      * @return
      */
-    public abstract LoadMoreHelper<VM> doLoadMore();
+    public abstract LoadMoreHelper<DT> doLoadMore();
 
     public static BuilderStep1 create(PtrFrameLayout ptrFrameLayout) {
         IPullView pullView = PtrFramePullView.create(ptrFrameLayout);
@@ -110,16 +110,16 @@ public abstract class LoadMoreHelper<VM> {
 
         /**
          * Set adapter
-         * @param <VM>
+         * @param <DT>
          */
-        public <VM> BuilderStep2<VM> setDataSwapper(IDataSwapper<VM> dataSwapper) {
+        public <DT> BuilderStep2<DT> setDataSwapper(IDataSwapper<DT> dataSwapper) {
             return new BuilderStep2<>(this, dataSwapper);
         }
     }
 
-    public static class BuilderStep2<VM> {
-        private final ParamBuilder<VM> paramBuilder;
-        private BuilderStep2(BuilderStep1 step1, IDataSwapper<VM> dataSwapper) {
+    public static class BuilderStep2<DT> {
+        private final ParamBuilder<DT> paramBuilder;
+        private BuilderStep2(BuilderStep1 step1, IDataSwapper<DT> dataSwapper) {
             paramBuilder = new ParamBuilder<>();
             paramBuilder.pullView = step1.pullView;
             paramBuilder.listWrapper = step1.listWrapper;
@@ -128,7 +128,7 @@ public abstract class LoadMoreHelper<VM> {
         /**
          * Set sync data loader, return pagedata directly. It will execute on work thread
          */
-        public ParamBuilder<VM> setSyncLoader(final SyncDataLoader<VM> syncLoader) {
+        public ParamBuilder<DT> setSyncDataLoader(final SyncDataLoader<DT> syncLoader) {
             paramBuilder.syncDataLoader = syncLoader;
             return paramBuilder;
         }
@@ -137,25 +137,25 @@ public abstract class LoadMoreHelper<VM> {
          * Set async data loader, you must call {@link LoadMoreHelper#onLoadEnd(PageData)} by yourself
          * when load data end.
          */
-        public ParamBuilder<VM> setAsyncLoader(AsyncDataLoader<VM> asyncLoader) {
+        public ParamBuilder<DT> setAsyncDataLoader(AsyncDataLoader<DT> asyncLoader) {
             paramBuilder.asyncLoader = asyncLoader;
             return paramBuilder;
         }
     }
 
 
-    public static class ParamBuilder<VM> {
+    public static class ParamBuilder<DT> {
         IListWrapper listWrapper;
         IPullView pullView;
-        IDataSwapper<VM> simpleDataSwaper;
-        OnLoadEndHandler<VM> onLoadEndHandler;
-        SyncDataLoader<VM> syncDataLoader;
-        AsyncDataLoader<VM> asyncLoader;
+        IDataSwapper<DT> simpleDataSwaper;
+        OnLoadEndHandler<DT> onLoadEndHandler;
+        SyncDataLoader<DT> syncDataLoader;
+        AsyncDataLoader<DT> asyncLoader;
         Executor executor;
 
-        ILoadViewCreator<VM> loadmoreCreator;
-        ILoadViewCreator<VM> loadFailedViewCreator;
-        ILoadViewCreator<VM> loadcompleteViewCreator ;
+        ILoadViewCreator<DT> loadmoreCreator;
+        ILoadViewCreator<DT> loadFailedViewCreator;
+        ILoadViewCreator<DT> loadcompleteViewCreator ;
 
         private ParamBuilder() {
         }
@@ -165,7 +165,7 @@ public abstract class LoadMoreHelper<VM> {
          * @param executor
          * @return
          */
-        public ParamBuilder<VM> setExecutor(Executor executor) {
+        public ParamBuilder<DT> setExecutor(Executor executor) {
             this.executor = executor;
             return this;
         }
@@ -176,7 +176,7 @@ public abstract class LoadMoreHelper<VM> {
          * @param onLoadEndHandler
          * @return
          */
-        public ParamBuilder<VM> setOnLoadEndHandler(OnLoadEndHandler<VM> onLoadEndHandler) {
+        public ParamBuilder<DT> setOnLoadEndHandler(OnLoadEndHandler<DT> onLoadEndHandler) {
             this.onLoadEndHandler = onLoadEndHandler;
             return this;
         }
@@ -187,7 +187,7 @@ public abstract class LoadMoreHelper<VM> {
          * @param footerCreator
          * @return
          */
-        public ParamBuilder<VM> setLoadmoreViewCreator(ILoadViewCreator<VM> footerCreator) {
+        public ParamBuilder<DT> setLoadMoreViewCreator(ILoadViewCreator<DT> footerCreator) {
             this.loadmoreCreator = footerCreator;
             return this;
         }
@@ -199,7 +199,7 @@ public abstract class LoadMoreHelper<VM> {
          * @param footerCreator
          * @return
          */
-        public ParamBuilder<VM> setLoadFailedViewCreator(ILoadViewCreator<VM> footerCreator) {
+        public ParamBuilder<DT> setLoadFailedViewCreator(ILoadViewCreator<DT> footerCreator) {
             this.loadFailedViewCreator = footerCreator;
             return this;
         }
@@ -210,7 +210,7 @@ public abstract class LoadMoreHelper<VM> {
          * @param footerCreator
          * @return
          */
-        public ParamBuilder<VM> setLoadcompleteViewCreator(ILoadViewCreator<VM> footerCreator) {
+        public ParamBuilder<DT> setLoadCompleteViewCreator(ILoadViewCreator<DT> footerCreator) {
             this.loadcompleteViewCreator = footerCreator;
             return this;
         }
@@ -219,8 +219,8 @@ public abstract class LoadMoreHelper<VM> {
          * Construct {@link LoadMoreHelper}, call {@link LoadMoreHelper#startPullData()} by yourself
          * @return
          */
-        public LoadMoreHelper<VM> build() {
-            LoadController<VM> loadController = new LoadController<>(this);
+        public LoadMoreHelper<DT> build() {
+            LoadController<DT> loadController = new LoadController<>(this);
             return loadController.getLoadHelper();
         }
 
@@ -228,16 +228,16 @@ public abstract class LoadMoreHelper<VM> {
          * Construct {@link LoadMoreHelper}, and start to pull data
          * @return
          */
-        public LoadMoreHelper<VM> startPullData() {
-            LoadController<VM> loadController = new LoadController<>(this);
-            LoadMoreHelper<VM> loadHelper =  loadController.getLoadHelper();
+        public LoadMoreHelper<DT> startPullData() {
+            LoadController<DT> loadController = new LoadController<>(this);
+            LoadMoreHelper<DT> loadHelper =  loadController.getLoadHelper();
             loadHelper.startPullData();
             return loadHelper;
         }
 
-        public LoadMoreHelper<VM> startPullData(boolean anima) {
-            LoadController<VM> loadController = new LoadController<>(this);
-            LoadMoreHelper<VM> loadHelper =  loadController.getLoadHelper();
+        public LoadMoreHelper<DT> startPullData(boolean anima) {
+            LoadController<DT> loadController = new LoadController<>(this);
+            LoadMoreHelper<DT> loadHelper =  loadController.getLoadHelper();
             loadHelper.startPullData(anima);
             return loadHelper;
         }
@@ -289,25 +289,29 @@ public abstract class LoadMoreHelper<VM> {
      * Load data sync. LoadHelper will call it on work thread
      */
     @WorkerThread
-    public interface SyncDataLoader<VM> {
-        PageData<VM> startLoadData(int page, PageData<VM> lastPageData);
+    public interface SyncDataLoader<DT> {
+        PageData<DT> startLoadData(int page, @Nullable PageData<DT> lastPageData);
     }
 
     /**
-     *
      * Load data int async thread
-     * @param <VM>
+     * @param <DT>
      */
-    public interface AsyncDataLoader<VM> {
-        void startLoadData(int page, PageData<VM> lastPageData);
+    public interface AsyncDataLoader<DT> {
+        /**
+         * LoadMoreHelper will call this when user
+         * @param page
+         * @param lastPageData
+         */
+        void startLoadData(int page, @Nullable PageData<DT> lastPageData);
     }
 
     /**
      * Called when data loaded end
-     * @param <VM>
+     * @param <DT>
      */
     @MainThread
-    public interface OnLoadEndHandler<VM> {
-        void doOnLoadEnd(PageData<VM> pageData);
+    public interface OnLoadEndHandler<DT> {
+        void doOnLoadEnd(PageData<DT> pageData);
     }
 }

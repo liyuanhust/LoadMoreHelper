@@ -53,7 +53,7 @@ public class Fragment4 extends Fragment {
         final MyAdapter4 adapter = new MyAdapter4();
         loadHelper = LoadMoreHelper.create(swipeRefreshLayout)
                 .setDataSwapper(adapter)
-                .setAsyncLoader((page, lastPageData) -> doLoadData(page))
+                .setAsyncDataLoader((page, lastPageData) -> doLoadData(page))
                 .startPullData(true);
     }
 

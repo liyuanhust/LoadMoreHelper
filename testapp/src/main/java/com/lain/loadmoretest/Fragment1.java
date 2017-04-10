@@ -68,7 +68,7 @@ public class Fragment1 extends Fragment{
                         adapter.notifyDataSetChanged();
                     }
                 })
-                .setSyncLoader(new LoadMoreHelper.SyncDataLoader<Item>() {
+                .setSyncDataLoader(new LoadMoreHelper.SyncDataLoader<Item>() {
                     @Override
                     public PageData<Item> startLoadData(int page, PageData<Item> lastPageData) {
                         BaseResult<Item> result = DataLoader.loadDataSync(page, null);
@@ -78,7 +78,7 @@ public class Fragment1 extends Fragment{
                         return PageData.createSuccess(page, result.getData(), result.isPageMore());
                     }
                 })
-                .setLoadcompleteViewCreator(new ILoadViewCreator<Item>() {
+                .setLoadCompleteViewCreator(new ILoadViewCreator<Item>() {
                     @Override
                     public View createView(ViewGroup parent, LoadMoreHelper<Item> loadHelper) {
                         return LayoutInflater.from(parent.getContext()).inflate(R.layout.load_complete_layout, parent, false);

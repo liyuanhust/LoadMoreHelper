@@ -18,13 +18,13 @@ import java.util.concurrent.Executors;
  * Created by liyuan on 16/12/20.
  */
 
-public class LoadController<VM> {
+public class LoadController<DT> {
     private static final String TAG = "LoadController";
     private static final int FIRST_PAGE_INDEX = PageData.FIRST_PAGE_INDEX;
     private static Handler sUiHandler = new Handler(Looper.getMainLooper());
     private static Executor sDefaultExecutor;
 
-    private LoadMoreHelper.ParamBuilder<VM> paramBuilder;
+    private LoadMoreHelper.ParamBuilder<DT> paramBuilder;
 
     /**
      * Indicate current page index
@@ -50,14 +50,14 @@ public class LoadController<VM> {
     /**
      * The lastest page data;
      */
-    private PageData<VM> lastPageData;
+    private PageData<DT> lastPageData;
 
 
-    LoadController(LoadMoreHelper.ParamBuilder<VM> builder) {
+    LoadController(LoadMoreHelper.ParamBuilder<DT> builder) {
         init(builder);
     }
 
-    private void init(LoadMoreHelper.ParamBuilder<VM> builder) {
+    private void init(LoadMoreHelper.ParamBuilder<DT> builder) {
         this.paramBuilder = builder;
 
         //Set pull data listener
@@ -71,7 +71,7 @@ public class LoadController<VM> {
             final Executor executor = builder.executor == null? getDefaultExecutor():builder.executor;
             builder.asyncLoader = (pageIndex, lastPageData)-> {
                 executor.execute(()->{
-                    PageData<VM> pageData = builder.syncDataLoader.startLoadData(pageIndex, lastPageData);
+                    PageData<DT> pageData = builder.syncDataLoader.startLoadData(pageIndex, lastPageData);
                     sUiHandler.post(()->onLoadDataEnd(pageData));
                 });
             };
@@ -132,7 +132,7 @@ public class LoadController<VM> {
      * Call when loadmore_vertical page end
      */
     @MainThread
-    private void onLoadMoreEnd(PageData<VM> pageData) {
+    private void onLoadMoreEnd(PageData<DT> pageData) {
         isLoadingMore = false;
         if (isDestoryed) {
             return;
@@ -149,7 +149,7 @@ public class LoadController<VM> {
         fillData(pageData);
     }
 
-    private void fillData(PageData<VM> pageData) {
+    private void fillData(PageData<DT> pageData) {
         if (pageData.getPageIndex() == FIRST_PAGE_INDEX) {
             paramBuilder.simpleDataSwaper.swapData(pageData.getData());
         } else {
@@ -170,7 +170,7 @@ public class LoadController<VM> {
      * @param pageData
      */
     @MainThread
-    void onLoadDataEnd(PageData<VM> pageData) {
+    void onLoadDataEnd(PageData<DT> pageData) {
         if (isDestoryed) {
             return;
         }
@@ -213,7 +213,7 @@ public class LoadController<VM> {
         isDestoryed = true;
     }
 
-    public IDataSwapper<VM> getSimpleDataSwaper() {
+    public IDataSwapper<DT> getSimpleDataSwaper() {
         return paramBuilder.simpleDataSwaper;
     }
 
@@ -253,18 +253,18 @@ public class LoadController<VM> {
         return null;
     }
 
-    public LoadMoreHelper<VM> getLoadHelper() {
+    public LoadMoreHelper<DT> getLoadHelper() {
         return loadHelper;
     }
 
-    private LoadMoreHelper<VM> loadHelper = new LoadMoreHelper<VM>() {
+    private LoadMoreHelper<DT> loadHelper = new LoadMoreHelper<DT>() {
         @MainThread
-        public LoadMoreHelper<VM> startPullData(boolean anima) {
+        public LoadMoreHelper<DT> startPullData(boolean anima) {
             startLoadAuto(anima);
             return this;
         }
 
-        public LoadMoreHelper<VM> onLoadEnd(PageData<VM> pageData) {
+        public LoadMoreHelper<DT> onLoadEnd(PageData<DT> pageData) {
             if (isOnMainThread()) {
                 onLoadDataEnd(pageData);
             } else {
@@ -274,7 +274,7 @@ public class LoadController<VM> {
         }
 
         @Override
-        public LoadMoreHelper<VM> doLoadMore() {
+        public LoadMoreHelper<DT> doLoadMore() {
             if (isOnMainThread()) {
                 LoadController.this.doLoadMore();
             } else {
